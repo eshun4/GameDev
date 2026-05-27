@@ -78,25 +78,25 @@ int main()
 		   direction_y = -direction_y;
 		}
 
-                if (player_top_touches_ball){
-                   direction_y = -direction_y;
-		  // So ball does not get stuck
-		   ball_y = u_player_y - ball_radius;
-	          //Optional: paddle movement affects ball direction
-		   direction_x = (direction_x) + player_speed * 0.4f;
-                }
+		if (player_top_touches_ball){
+			direction_y = -direction_y;
+			// So ball does not get stuck
+			ball_y = u_player_y - ball_radius;
+				//Optional: paddle movement affects ball direction
+			direction_x = (direction_x) + player_speed * 0.4f;
+		}
 
 		player_speed = 0;
 
 		// Move Player Logic Below
-                if (IsKeyDown(KEY_D) && player_x < (WIDTH - player_length)){
-                    player_x += 10;
+		if (IsKeyDown(KEY_D) && player_x < (WIDTH - player_length)){
+			player_x += 10;
 		    player_speed = 5;
-                }
-                if (IsKeyDown(KEY_A) && player_x > 0){
-                   player_x -= 10;
-	           player_speed = -5;
-                }
+        }
+		if (IsKeyDown(KEY_A) && player_x > 0){
+			player_x -= 10;
+	        player_speed = -5;
+		}
 
 		// DRAW Everything
 		BeginDrawing();
@@ -107,7 +107,7 @@ int main()
 		bool ball_touches_bottom_screen = b_ball_y >= HEIGHT;
 
 		if (ball_touches_bottom_screen){
-		   DrawText("Game Over", 400, 200, 20, RED);
+		   DrawText("Sia Benku!!", 400, 200, 20, RED);
 		}
 		EndDrawing();
 	}
