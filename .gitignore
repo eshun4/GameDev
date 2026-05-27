@@ -37,29 +37,15 @@
 *.out
 *.app
 
-# debug information files
-*.dwo
+# Linux/macOS executables with no extension in this repo
+/axe_game/axe_game
+/hello_world/hello_world
+/pong/pong
+/tetris/tetris
 
-# Build/output folders
-build/
-bin/
-out/
-dist/
-
-# Build/output folders inside any subfolder
-**/build/
-**/bin/
-**/out/
-**/dist/
-
-# C++ executables with no extension in this repo
-axe_game/axe_game
-hello_world/hello_world
-pong/pong
-tetris/tetris
-
-# Common executable names
+# Common executable names inside any folder
 **/main
 **/program
 **/app
 **/game
+**/a.out
