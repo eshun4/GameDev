@@ -2,7 +2,7 @@
 
 /*
 This contains code for a Pong Game with raylib: Version 1
-- This version 1 contains a basic tetris gme tht allows the 
+- This version 1 contains a basic pong game tht allows the 
 user to control the tile/board and hit the ball unto the top,
 left and right portions of the  screen.
 */
@@ -13,46 +13,40 @@ const int HEIGHT =  400;
 
 int main()
 {
+
 	// Call a function that initializes  window (takes multiple input)
 	InitWindow(WIDTH, HEIGHT, "Kofi's PONG V1");
 
+	float gravity = 0.2f;
+
 	// ball coordinates
-	int ball_x = WIDTH / 2;
-	int ball_y = HEIGHT / 2;
+	float ball_x = WIDTH / 2;
+	float ball_y = HEIGHT / 2;
 
 	// Player tile coordinates
 	int player_x = (WIDTH / 2) - 40;
 	int player_y = HEIGHT - 20;
 
+	// Player speed
+	float player_speed = 0;
+
 	// direction
-	int direction = 5;
+	float direction_x = 0;
+	float direction_y = 5;
 
 	int ball_radius = 15;
 	int player_length = 100;
 	int player_width = 20;
 
-	//circle edges
-	int l_ball_x = ball_x - ball_radius;
-	int r_ball_x = ball_x + ball_radius;
-	int u_ball_y = ball_y - ball_radius;
-	int b_ball_y = ball_y + ball_radius;
-
-	// axe edges
-	int l_player_x = player_x;
-	int r_player_x = player_x + player_length;
-	int u_player_y = player_y;
-	int b_player_y = player_y + player_length;
-
-	// colision with axe
-	//bool collision_with_axe = b_axe_y >= u_circle_y && u_axe_y <= b_circle_y && l_axe_x <= r_circle_x && r_axe_x >= l_circle_x;
-
-//	bool player_top_touches_ball =  b_ball_y >= u_player_y;
-
 	SetTargetFPS(60);
+
 	while(!WindowShouldClose()){
-		
+		// Update the ball movement
+		direction_y += gravity;
+
 		// Move ball
-                ball_y += direction;
+                ball_y += direction_y;
+		ball_x += direction_x;
 
 		//circle edges
 	        int l_ball_x = ball_x - ball_radius;
@@ -60,57 +54,61 @@ int main()
        	        int u_ball_y = ball_y - ball_radius;
                 int b_ball_y = ball_y + ball_radius;
 
-		l_player_x = player_x;
-   	        r_player_x = player_x + player_length;
-
-		bool player_top_touches_ball = (b_ball_y >= u_player_y) && 
-                                   (r_ball_x >= l_player_x) && 
-                                   (l_ball_x <= r_player_x);
+		int l_player_x = player_x;
+   	        int r_player_x = player_x + player_length;
+		int u_player_y = player_y;
+       	        int b_player_y = player_y + player_width;
 
 
-                if (ball_y > HEIGHT || b_ball_y > HEIGHT || ball_y < 0 || (player_top_touches_ball && direction > 0)){
-                   direction = -direction;
+		bool player_top_touches_ball = 
+				(b_ball_y >= u_player_y) &&
+				(u_ball_y <= b_player_y) &&
+				(r_ball_x >= l_player_x) &&
+				(l_ball_x <= r_player_x) &&
+				(direction_y > 0);
+
+		bool ball_touches_left = l_ball_x <= 0;
+		bool ball_touches_right = r_ball_x >= WIDTH;
+
+		if (ball_touches_right || ball_touches_left){
+		   direction_x = -direction_x;
+		}
+
+		if (u_ball_y <= 0){
+		   direction_y = -direction_y;
+		}
+
+                if (player_top_touches_ball){
+                   direction_y = -direction_y;
+		  // So ball does not get stuck
+		   ball_y = u_player_y - ball_radius;
+	          //Optional: paddle movement affects ball direction
+		   direction_x = (direction_x) + player_speed * 0.4f;
                 }
 
+		player_speed = 0;
 
+		// Move Player Logic Below
+                if (IsKeyDown(KEY_D) && player_x < (WIDTH - player_length)){
+                    player_x += 10;
+		    player_speed = 5;
+                }
+                if (IsKeyDown(KEY_A) && player_x > 0){
+                   player_x -= 10;
+	           player_speed = -5;
+                }
 
+		// DRAW Everything
 		BeginDrawing();
 		ClearBackground(WHITE);
-		// if/else statement for collision of axe
-		//if (collision_with_axe){
-		  // DrawText("Game Over", 400, 200, 20, RED);
-		//}
-		//else{
-		// Update Edges
-		//l_circle_x = circle_x - circle_radius;
-		//r_circle_x = circle_x + circle_radius;
-		//u_circle_y = circle_y - circle_radius;
-		//b_circle_y = circle_y + circle_radius;
-		//l_axe_x = axe_x;
-		//r_axe_x = axe_x + axe_length;
-		//u_axe_y = axe_y;
-		//b_axe_y = axe_y + axe_length;
-		// Update collison with axe
-		//collision_with_axe = b_axe_y >= u_circle_y && u_axe_y <= b_circle_y && l_axe_x <= r_circle_x && r_axe_x >= l_circle_x;
+        DrawCircle(ball_x, ball_y, ball_radius, RED);
+        DrawRectangle(player_x, player_y, player_length, player_width, BLUE);
+		// If the ball passes the bottom of the screen
+		bool ball_touches_bottom_screen = b_ball_y >= HEIGHT;
 
-                // Game Logic Begins
-                DrawCircle(ball_x, ball_y, ball_radius, RED);
-                DrawRectangle(player_x, player_y, player_length, player_width, BLUE);
-		// Move ball
-		//ball_y += direction;
-
-                //if (ball_y > HEIGHT || ball_y < 0 || (player_top_touches_ball && direction > 0)){
-                  // direction = -direction;
-               // }
-
-                // Move Player Logic Below
-                if (IsKeyDown(KEY_D) && player_x < (WIDTH - player_length)){
-                    player_x += 5;
-                }
-                else if (IsKeyDown(KEY_A) && player_x > 0){
-                   player_x -= 5;
-                }
-
+		if (ball_touches_bottom_screen){
+		   DrawText("Game Over", 400, 200, 20, RED);
+		}
 		EndDrawing();
 	}
 
