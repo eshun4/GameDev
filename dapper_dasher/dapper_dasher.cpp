@@ -22,6 +22,11 @@ int main()
 	int velocity = 0;
 	// acceleration due to gravity (pixels/frame/frame)
 	const int gravity = 1;
+	// Texture Scarfy
+	Texture2D scarfy = LoadTexture("textures/scarfy.png");
+	Rectangle scarfyRec;
+	Vector2 scarfyPos;
+	
 
 	// for air Jump
 	bool isInAir;
