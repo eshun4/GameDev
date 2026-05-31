@@ -1,5 +1,5 @@
 CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17
+CXXFLAGS = -Wall -Wextra -std=c++17 -g
 LIBS = -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 dapper_dasher: dapper_dasher.cpp
